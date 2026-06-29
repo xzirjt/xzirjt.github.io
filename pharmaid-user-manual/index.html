@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PharmAID 数智研发平台 · 用户手册</title>
+<style>
+  :root {
+    --blue:    #2D34A6;
+    --blue-d:  #161888;
+    --blue-l:  #EEF1FB;
+    --blue-m:  #5566CE;
+    --sky:     #3398C3;
+    --sky-l:   #EAF5FA;
+    --teal:    #1AA7BC;
+    --teal-l:  #E8F7F9;
+    --violet:  #7853A5;
+    --violet-l:#F0ECF6;
+    --amber:   #F5A623;
+    --amber-l: #FEF6E7;
+    --danger:  #E4190E;
+    --gray-1:  #F5F7FB;
+    --gray-2:  #EDF0F6;
+    --gray-3:  #D2D7E2;
+    --gray-5:  #5A6072;
+    --gray-7:  #3D4252;
+    --gray-9:  #1A1D29;
+    --white:   #FFFFFF;
+    --radius:  12px;
+    --gradient-brand: linear-gradient(135deg,#161888 0%,#232A8C 45%,#2A7DA1 100%);
+    --gradient-primary: linear-gradient(135deg,#2D34A6 0%,#3A45BE 100%);
+    --gradient-sky: linear-gradient(135deg,#2A7DA1 0%,#3398C3 100%);
+    --gradient-teal: linear-gradient(135deg,#15889A 0%,#1AA7BC 100%);
+    --gradient-spectrum: linear-gradient(90deg,#1AA7BC 0%,#3398C3 25%,#161888 50%,#7853A5 75%,#E4190E 100%);
+    --glass-bg: rgba(255,255,255,0.72);
+    --glass-border: rgba(255,255,255,0.76);
+    --shadow-h:0 8px 16px rgba(22,24,64,0.08), 0 20px 44px rgba(22,24,64,0.14);
+    --shadow-soft:0 2px 6px rgba(22,24,64,0.06), 0 8px 20px rgba(22,24,64,0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif; font-size: 15px; line-height: 1.7; color: var(--gray-7); background:
+    radial-gradient(760px 520px at 86% -10%, rgba(51,152,195,0.18), transparent 62%),
+    radial-gradient(700px 560px at 12% 16%, rgba(126,141,222,0.14), transparent 58%),
+    linear-gradient(180deg,#F7F9FD 0%,#EEF2FA 100%); display: flex; }
+
+  /* ── SIDEBAR ── */
+  .sidebar { width: 252px; min-height: 100vh; background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(246,248,253,0.94)); position: fixed; top:0; left:0; bottom:0; display:flex; flex-direction:column; z-index:100; overflow-y:auto; border-right:1px solid rgba(210,215,226,0.82); box-shadow:10px 0 28px rgba(22,24,64,0.06); }
+  .sidebar::before { content:''; position:absolute; left:0; right:0; top:0; height:3px; background:var(--gradient-spectrum); }
+  .sidebar::-webkit-scrollbar { width:4px; }
+  .sidebar::-webkit-scrollbar-thumb { background:rgba(90,96,114,0.18); border-radius:2px; }
+  .sb-logo { padding:24px 20px 18px; border-bottom:1px solid rgba(210,215,226,0.72); }
+  .sb-logo .brand { font-size:21px; font-weight:900; color:var(--gray-9); letter-spacing:-.5px; }
+  .sb-logo .brand span { color:var(--blue-m); }
+  .sb-logo .sub { font-size:10.5px; color:var(--gray-5); margin-top:3px; }
+  .sb-section { font-size:9.5px; font-weight:700; letter-spacing:1.2px; color:var(--gray-5); text-transform:uppercase; padding:15px 20px 5px; opacity:.68; }
+  .nav-item { display:flex; align-items:center; gap:9px; padding:8px 20px; color:var(--gray-5); font-size:13px; text-decoration:none; transition:all .15s; border-left:3px solid transparent; }
+  .nav-item:hover { background:rgba(238,241,251,0.88); color:var(--blue-d); }
+  .nav-item.active { background:linear-gradient(90deg,rgba(238,241,251,0.98),rgba(234,245,250,0.72)); color:var(--blue-d); border-left-color:var(--blue-m); font-weight:700; }
+  .nav-item .ic { font-size:14px; width:18px; text-align:center; flex-shrink:0; }
+  .badge { margin-left:auto; font-size:9px; font-weight:800; background:var(--gradient-sky); color:#fff; padding:1px 6px; border-radius:20px; }
+  .soon { margin-left:auto; font-size:9px; color:var(--gray-5); opacity:.56; }
+  .sb-foot { margin-top:auto; padding:14px 20px; border-top:1px solid rgba(210,215,226,0.72); font-size:10.5px; color:var(--gray-5); opacity:.56; }
+
+  /* ── MAIN ── */
+  .main { margin-left:252px; flex:1; }
+  .topbar { position:sticky; top:0; background:rgba(255,255,255,0.72); backdrop-filter:blur(20px) saturate(180%); -webkit-backdrop-filter:blur(20px) saturate(180%); border-bottom:1px solid rgba(210,215,226,0.74); padding:0 44px; height:52px; display:flex; align-items:center; justify-content:space-between; z-index:50; box-shadow:inset 0 1px 0 rgba(255,255,255,0.74); }
+  .topbar-t { font-size:13px; color:var(--gray-5); font-weight:500; }
+  .topbar-pill { background:rgba(238,241,251,0.9); color:var(--blue-d); font-size:11.5px; font-weight:600; padding:3px 12px; border:1px solid rgba(45,52,166,0.12); border-radius:20px; }
+  .content { padding:44px; max-width:880px; margin:0 auto; }
+
+  /* ── HERO ── */
+  .hero { background:radial-gradient(600px 300px at 86% 0%, rgba(51,152,195,0.20), transparent 64%), radial-gradient(520px 320px at 10% 100%, rgba(126,141,222,0.18), transparent 58%), linear-gradient(180deg,rgba(255,255,255,0.92),rgba(238,242,250,0.92)); border-radius:18px; padding:52px; color:var(--gray-9); margin-bottom:44px; position:relative; overflow:hidden; border:1px solid rgba(210,215,226,0.82); box-shadow:var(--shadow-soft); }
+  .hero::before { content:''; position:absolute; left:0; right:0; top:0; height:3px; background:var(--gradient-spectrum); }
+  .hero-tag { display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; background:rgba(238,241,251,0.92); border:1px solid rgba(45,52,166,0.12); padding:3px 12px; border-radius:20px; margin-bottom:18px; color:var(--blue-d); }
+  .hero h1 { font-size:40px; font-weight:900; letter-spacing:-1px; line-height:1.15; margin-bottom:8px; }
+  .hero h1 span { color:var(--blue-m); }
+  .hero-sub { font-size:15px; color:var(--gray-5); margin-bottom:28px; }
+  .hero-pills { display:flex; gap:8px; flex-wrap:wrap; }
+  .hero-pill { background:rgba(255,255,255,0.78); border:1px solid rgba(210,215,226,0.9); color:var(--gray-7); font-size:12px; padding:4px 13px; border-radius:20px; }
+
+  /* ── SECTION HEADER ── */
+  .section { margin-bottom:48px; }
+  .sec-hd { display:flex; align-items:center; gap:11px; margin-bottom:22px; padding-bottom:13px; border-bottom:2px solid var(--gray-2); }
+  .sec-ic { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+  .sec-hd h2 { font-size:21px; font-weight:800; color:var(--gray-9); letter-spacing:-.3px; }
+  .sec-hd .num { font-size:10.5px; font-weight:700; color:var(--gray-5); background:var(--gray-2); padding:2px 8px; border-radius:10px; }
+
+  /* ── MODULE CARD ── */
+  .mc { background:rgba(255,255,255,0.86); backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%); border:1px solid rgba(210,215,226,0.78); border-radius:var(--radius); margin-bottom:16px; overflow:hidden; box-shadow:var(--shadow-soft); transition:box-shadow .2s; }
+  .mc:hover { box-shadow:var(--shadow-h); }
+  .mc-hd { padding:16px 22px 14px; border-bottom:1px solid rgba(229,232,239,0.86); display:flex; align-items:flex-start; gap:13px; background:linear-gradient(180deg,rgba(255,255,255,0.72),rgba(255,255,255,0.38)); }
+  .mc-ic { width:40px; height:40px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0; }
+  .mc-title { font-size:15.5px; font-weight:800; color:var(--gray-9); display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+  .bnew { font-size:9px; font-weight:800; background:var(--gradient-primary); color:#fff; padding:1px 7px; border-radius:10px; box-shadow:0 4px 12px rgba(45,52,166,0.24); }
+  .bsoon { font-size:9px; font-weight:700; background:var(--gray-3); color:var(--gray-5); padding:1px 7px; border-radius:10px; }
+  .mc-sub { font-size:12px; color:var(--gray-5); margin-top:3px; }
+  .mc-url { font-size:10.5px; color:var(--blue-d); font-family:monospace; background:var(--blue-l); border:1px solid rgba(45,52,166,0.10); padding:1px 8px; border-radius:5px; margin-top:4px; display:inline-block; }
+  .mc-body { padding:18px 22px; }
+
+  /* ── SUITE GRID ── */
+  .sg { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 24px; }
+  .sg-card { background:rgba(255,255,255,0.84); border:1px solid rgba(210,215,226,0.78); border-radius:var(--radius); padding:18px; box-shadow:0 1px 2px rgba(22,24,64,0.04); }
+  .sg-card .si { font-size:22px; margin-bottom:8px; }
+  .sg-card .sn { font-size:13.5px; font-weight:700; color:var(--gray-9); margin-bottom:3px; }
+  .sg-card .sd { font-size:12px; color:var(--gray-5); line-height:1.5; }
+
+  /* ── GRID 3 ── */
+  .g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:14px 0; }
+  .g3-card { background:rgba(255,255,255,0.84); border:1px solid rgba(210,215,226,0.78); border-radius:9px; padding:16px; text-align:center; box-shadow:0 1px 2px rgba(22,24,64,0.04); }
+  .g3-card .gi { font-size:24px; margin-bottom:8px; }
+  .g3-card .gn { font-size:12.5px; font-weight:700; color:var(--gray-9); margin-bottom:3px; }
+  .g3-card .gd { font-size:11px; color:var(--gray-5); line-height:1.5; }
+
+  /* ── TABS ── */
+  .tabs { display:flex; gap:0; margin:12px 0; border:1px solid var(--gray-3); border-radius:8px; overflow:hidden; background:rgba(255,255,255,0.64); }
+  .tab { flex:1; padding:9px 14px; text-align:center; font-size:12.5px; font-weight:600; color:var(--gray-7); background:rgba(245,247,251,0.72); border-right:1px solid var(--gray-3); cursor:default; }
+  .tab:last-child { border-right:none; }
+  .tab.on { background:rgba(245,247,251,0.72); color:var(--gray-7); }
+
+  /* ── STEPS ── */
+  .steps { display:flex; flex-direction:column; gap:9px; margin:12px 0; }
+  .step { display:flex; gap:12px; align-items:flex-start; }
+  .sn2 { width:24px; height:24px; border-radius:50%; background:var(--gradient-primary); color:#fff; font-size:11.5px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; box-shadow:0 6px 16px rgba(45,52,166,0.20); }
+  .sc .st { font-size:13.5px; font-weight:700; color:var(--gray-9); margin-bottom:2px; }
+  .sc .sd { font-size:12.5px; color:var(--gray-5); }
+
+  /* ── LIST ── */
+  .fl { list-style:none; display:flex; flex-direction:column; gap:6px; margin:10px 0; }
+  .fl li { display:flex; align-items:flex-start; gap:9px; font-size:13.5px; color:var(--gray-7); }
+  .fl li::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--blue); flex-shrink:0; margin-top:8px; }
+
+  /* ── TABLE ── */
+  .dt { width:100%; border-collapse:collapse; font-size:13px; margin:12px 0; }
+  .dt th { background:var(--gray-2); color:var(--gray-5); font-weight:700; text-align:left; padding:10px 14px; font-size:11.5px; border-bottom:1px solid var(--gray-3); }
+  .dt th:first-child { border-radius:8px 0 0 0; }
+  .dt th:last-child { border-radius:0 8px 0 0; }
+  .dt td { padding:9px 14px; border-bottom:1px solid var(--gray-2); vertical-align:top; }
+  .dt tr:last-child td { border-bottom:none; }
+  .dt tr:nth-child(even) td { background:rgba(245,247,251,0.74); }
+  .dt td:first-child { font-weight:600; color:var(--gray-9); white-space:nowrap; }
+
+  /* ── BOXES ── */
+  .ib { background:var(--blue-l); border-left:4px solid var(--blue); border-radius:0 8px 8px 0; padding:12px 16px; font-size:13px; color:var(--blue-d); margin:14px 0; }
+  .ib strong { display:block; margin-bottom:3px; font-size:12.5px; }
+  .wb { background:var(--amber-l); border-left:4px solid var(--amber); border-radius:0 8px 8px 0; padding:12px 16px; font-size:13px; color:#92400E; margin:14px 0; }
+  .tb { background:var(--teal-l); border-left:4px solid var(--teal); border-radius:0 8px 8px 0; padding:12px 16px; font-size:13px; color:#065F46; margin:14px 0; }
+  .tb strong { display:block; margin-bottom:3px; }
+
+  /* ── CHIPS ── */
+  .chips { display:flex; flex-wrap:wrap; gap:7px; margin:10px 0; }
+  .chip { background:rgba(255,255,255,0.72); border:1px solid var(--gray-3); border-radius:20px; padding:4px 12px; font-size:12px; color:var(--gray-7); box-shadow:0 1px 2px rgba(22,24,64,0.04); }
+
+  /* ── LAYOUT DIAGRAM ── */
+  .layout-dia { display:grid; grid-template-columns:200px 1fr; gap:0; margin:16px 0; border-radius:12px; overflow:hidden; border:1px solid var(--gray-3); font-size:12.5px; }
+  .ld-left { background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(238,242,250,0.92)); padding:18px 16px; display:flex; flex-direction:column; gap:3px; border-right:1px solid var(--gray-3); }
+  .ld-right { background:var(--gray-1); padding:18px 16px; display:flex; flex-direction:column; gap:8px; }
+  .ld-brand { font-size:14px; font-weight:900; color:var(--gray-9); letter-spacing:-.3px; margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid var(--gray-3); }
+  .ld-brand span { color:var(--blue-m); }
+  .ld-item { color:var(--gray-5); font-size:11.5px; padding:3px 6px; border-radius:5px; }
+  .ld-item.on { color:var(--blue-d); background:rgba(238,241,251,0.86); border-left:2px solid var(--blue-m); padding-left:8px; font-weight:700; }
+  .ld-item.dim { color:var(--gray-5); opacity:.58; font-size:10.5px; }
+  .ld-item.sub { padding-left:14px; color:var(--gray-5); opacity:.74; font-size:11px; }
+  .ld-sep { height:1px; background:var(--gray-3); margin:4px 0; }
+  .ld-right-top { background:var(--white); border:1px solid var(--gray-3); border-radius:8px; padding:10px 14px; }
+  .ld-right-top .rt-label { font-size:10px; font-weight:700; color:var(--blue); letter-spacing:.5px; text-transform:uppercase; margin-bottom:6px; }
+  .ld-right-top .rt-title { font-size:13px; font-weight:700; color:var(--gray-9); }
+  .ld-zone { background:var(--white); border:1px solid var(--gray-3); border-radius:8px; padding:12px 14px; flex:1; }
+  .ld-zone .zl { font-size:10.5px; font-weight:700; color:var(--gray-5); letter-spacing:.4px; margin-bottom:7px; }
+  .ld-zone .zi { font-size:12px; color:var(--gray-7); line-height:1.8; }
+  .ld-zone .zi span { display:inline-block; background:var(--blue-l); color:var(--blue); border-radius:4px; padding:1px 7px; margin:2px 3px; font-size:11px; }
+
+  /* ── SCENE TABLE ── */
+  .sct { width:100%; border-collapse:collapse; font-size:12.5px; margin:14px 0; border-radius:10px; overflow:hidden; border:1px solid var(--gray-3); }
+  .sct th { background:linear-gradient(180deg,rgba(238,241,251,0.96),rgba(234,245,250,0.82)); color:var(--blue-d); font-weight:700; padding:10px 14px; font-size:11.5px; text-align:left; border-bottom:1px solid var(--gray-3); }
+  .sct td { padding:9px 14px; border-bottom:1px solid var(--gray-2); vertical-align:top; }
+  .sct tr:last-child td { border-bottom:none; }
+  .sct td:first-child { color:var(--gray-9); font-weight:600; width:28%; }
+  .sct td:nth-child(2) { color:var(--blue); font-weight:700; width:26%; }
+  .sct td:last-child { color:var(--gray-5); }
+  .sct tr:nth-child(even) td { background:var(--gray-1); }
+
+  /* ── CHAT CARD ── */
+  .chat-card { background:rgba(255,255,255,0.84); border:1px solid var(--gray-3); border-radius:9px; padding:14px 18px; margin:8px 0; }
+  .chat-modes { display:flex; gap:0; margin:12px 0; }
+  .chat-mode { padding:8px 20px; font-size:13px; font-weight:700; border:1px solid var(--gray-3); color:var(--gray-7); background:rgba(255,255,255,0.78); cursor:default; }
+  .chat-mode:first-child { border-radius:8px 0 0 8px; }
+  .chat-mode:last-child { border-radius:0 8px 8px 0; border-left:none; }
+  .chat-mode.on { background:rgba(255,255,255,0.78); color:var(--gray-7); border-color:var(--gray-3); }
+
+  /* ── FAQ ── */
+  .faq { border:1px solid rgba(210,215,226,0.78); border-radius:9px; margin-bottom:9px; background:rgba(255,255,255,0.84); box-shadow:0 1px 2px rgba(22,24,64,0.04); }
+  .faq-q { padding:13px 18px; font-weight:700; font-size:13.5px; color:var(--gray-9); display:flex; gap:9px; align-items:flex-start; }
+  .faq-q .qb { background:var(--gradient-primary); color:#fff; font-size:10px; font-weight:800; padding:1px 7px; border-radius:6px; flex-shrink:0; margin-top:3px; }
+  .faq-a { padding:0 18px 13px; font-size:13px; color:var(--gray-5); margin-left:36px; line-height:1.7; }
+
+  hr.div { border:none; border-top:1px solid var(--gray-3); margin:28px 0; }
+  p { margin-bottom:9px; font-size:13.5px; color:var(--gray-7); }
+  h3 { font-size:14.5px; font-weight:700; color:var(--gray-9); margin:16px 0 7px; }
+  h4 { font-size:13px; font-weight:700; color:var(--gray-7); margin:12px 0 5px; }
+  code { background:var(--gray-2); border-radius:4px; padding:1px 6px; font-size:12.5px; color:var(--blue-d); font-family:monospace; }
+
+  .i-bl { background:var(--blue-l);   color:var(--blue-d); }
+  .i-tl { background:var(--teal-l);   color:#116978;   }
+  .i-vl { background:var(--violet-l); color:var(--violet); }
+  .i-al { background:var(--amber-l);  color:var(--amber);  }
+  .i-gl { background:var(--gray-2);   color:var(--gray-5); }
+
+  /* ── MOTION & INTERACTION POLISH ── */
+  :root {
+    --ease-out: cubic-bezier(.16, 1, .3, 1);
+    --ease-spring: cubic-bezier(.2, .9, .2, 1.15);
+    --shadow-f: 0 16px 42px rgba(15,30,60,0.12);
+  }
+  html { scroll-padding-top:72px; }
+  body { overflow-x:hidden; }
+  [id] { scroll-margin-top:76px; }
+  .scroll-progress { position:fixed; top:0; left:252px; right:0; height:3px; transform:scaleX(0); transform-origin:left center; background:var(--gradient-spectrum); z-index:200; transition:transform .12s linear; }
+  .topbar { transition:box-shadow .22s var(--ease-out), background-color .22s var(--ease-out), border-color .22s var(--ease-out); }
+  .topbar.is-scrolled { background:rgba(255,255,255,0.82); border-bottom-color:rgba(45,52,166,0.12); box-shadow:0 8px 26px rgba(22,24,64,0.08); }
+  .sidebar { scroll-behavior:smooth; }
+  .nav-item { position:relative; transform:translateX(0); transition:background-color .22s var(--ease-out), color .22s var(--ease-out), border-color .22s var(--ease-out), transform .22s var(--ease-out); }
+  .nav-item::after { content:''; position:absolute; inset:6px 10px 6px 8px; border-radius:10px; background:rgba(238,241,251,0.76); border:1px solid rgba(45,52,166,0.08); opacity:0; transform:scale(.96); transition:opacity .22s var(--ease-out), transform .22s var(--ease-out); pointer-events:none; }
+  .nav-item:hover { transform:translateX(3px); }
+  .nav-item:hover::after, .nav-item.is-clicked::after { opacity:1; transform:scale(1); }
+  .nav-item.active { box-shadow:inset 12px 0 24px rgba(86,102,206,0.08); }
+  .nav-item:focus-visible, .faq:focus-visible { outline:2px solid var(--blue-m); outline-offset:2px; }
+  .hero { isolation:isolate; box-shadow:0 8px 16px rgba(22,24,64,0.07), 0 18px 38px rgba(22,24,64,0.10); transform:translateZ(0); }
+  .hero::after { content:''; position:absolute; top:22px; right:26px; width:92px; height:92px; border:1px solid rgba(85,102,206,0.12); border-radius:28px; transform:rotate(12deg); opacity:.28; pointer-events:none; box-shadow:0 0 30px rgba(51,152,195,0.12); }
+  .hero-tag, .hero h1, .hero-sub, .hero-pill { position:relative; z-index:1; }
+  .hero-pill { transition:transform .24s var(--ease-spring), background-color .24s var(--ease-out), border-color .24s var(--ease-out); }
+  .hero-pill:hover { transform:translateY(-2px) scale(1.02); background:#fff; border-color:rgba(85,102,206,0.24); }
+  .sec-hd { position:relative; }
+  .sec-hd::after { content:''; position:absolute; left:0; bottom:-2px; width:72px; height:2px; background:linear-gradient(90deg,var(--teal),var(--sky),var(--blue-d)); transform:scaleX(.35); transform-origin:left center; opacity:.78; transition:transform .45s var(--ease-out); }
+  .section.is-visible .sec-hd::after, .mc.is-visible .sec-hd::after { transform:scaleX(1); }
+  .mc, .sg-card, .g3-card, .chat-card, .faq, .layout-dia, .ib, .wb, .tb { transition:transform .28s var(--ease-out), box-shadow .28s var(--ease-out), border-color .28s var(--ease-out), background-color .28s var(--ease-out); }
+  .mc { position:relative; }
+  .mc:hover { transform:translateY(-3px); box-shadow:var(--shadow-h); border-color:rgba(85,102,206,0.34); }
+  .mc:hover .mc-ic, .sg-card:hover .si, .g3-card:hover .gi, .sec-hd:hover .sec-ic { transform:translateY(-1px) scale(1.06) rotate(-3deg); }
+  .mc-ic, .sec-ic, .sg-card .si, .g3-card .gi { transition:transform .34s var(--ease-spring), box-shadow .28s var(--ease-out); }
+  .mc:hover .mc-ic, .sec-hd:hover .sec-ic { box-shadow:0 8px 20px rgba(45,52,166,0.14); }
+  .sg-card:hover, .g3-card:hover, .chat-card:hover { transform:translateY(-3px); box-shadow:0 12px 30px rgba(22,24,64,0.10); border-color:rgba(85,102,206,0.32); }
+  .chip, .tab, .chat-mode, .badge, .bnew, .bsoon, .soon, .topbar-pill, code { transition:transform .2s var(--ease-spring), background-color .2s var(--ease-out), color .2s var(--ease-out), border-color .2s var(--ease-out); }
+  .chip:hover { transform:translateY(-2px); background:var(--blue-l); border-color:rgba(85,102,206,0.34); color:var(--blue-d); }
+  .tab:hover, .tab.on:hover { background:rgba(245,247,251,0.72); color:var(--gray-7); }
+  .chat-mode:hover, .chat-mode.on:hover { background:rgba(255,255,255,0.78); color:var(--gray-7); }
+  .step { position:relative; border-radius:10px; transition:background-color .22s var(--ease-out), transform .22s var(--ease-out); }
+  .step:hover { background:rgba(238,241,251,0.68); transform:translateX(3px); }
+  .sn2 { transition:transform .24s var(--ease-spring), box-shadow .24s var(--ease-out); }
+  .step:hover .sn2 { transform:scale(1.08); box-shadow:0 8px 18px rgba(45,52,166,0.22); }
+  .dt tr, .sct tr { transition:background-color .2s var(--ease-out), transform .2s var(--ease-out); }
+  .dt tbody tr:hover td, .sct tbody tr:hover td { background:var(--blue-l); }
+  .ib:hover, .wb:hover, .tb:hover, .layout-dia:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(22,24,64,0.09); }
+  .faq { overflow:hidden; cursor:pointer; }
+  .faq-q { position:relative; padding-right:48px; }
+  .faq-q::after { content:''; position:absolute; right:18px; top:18px; width:9px; height:9px; border-right:2px solid var(--gray-5); border-bottom:2px solid var(--gray-5); transform:rotate(45deg); transition:transform .24s var(--ease-out), border-color .24s var(--ease-out); }
+  .faq:hover { transform:translateY(-2px); box-shadow:0 12px 28px rgba(22,24,64,0.09); border-color:rgba(85,102,206,0.32); }
+  .faq:hover .faq-q::after { border-color:var(--blue); }
+  .faq.is-collapsed .faq-q::after { transform:rotate(-45deg); }
+  .faq-a { max-height:220px; opacity:1; transition:max-height .28s var(--ease-out), opacity .2s var(--ease-out), padding .28s var(--ease-out); }
+  .faq.is-collapsed .faq-a { max-height:0; opacity:0; padding-top:0; padding-bottom:0; }
+  .reveal { opacity:0; transform:translateY(18px); transition:opacity .58s var(--ease-out), transform .58s var(--ease-out); }
+  .reveal.is-visible { opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important; }
+    .reveal { opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== SIDEBAR ========== -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="brand">Pharm<span>AID</span></div>
+    <div class="sub">数智研发平台 · 用户手册</div>
+  </div>
+
+  <div class="sb-section">入门</div>
+  <a class="nav-item active" href="#intro"><span class="ic">🏠</span>平台简介</a>
+  <a class="nav-item" href="#login"><span class="ic">🔐</span>登录与界面</a>
+  <a class="nav-item" href="#scene"><span class="ic">🗺️</span>场景导航</a>
+  <a class="nav-item" href="#dashboard"><span class="ic">📊</span>工作台</a>
+  <a class="nav-item" href="#agenttour"><span class="ic">🤖</span>智能体导览</a>
+
+  <div class="sb-section">PharmaSight 决策</div>
+  <a class="nav-item" href="#pipeline"><span class="ic">🔬</span>智能竞品分析助手</a>
+  <a class="nav-item" href="#sales"><span class="ic">📈</span>销售额预测</a>
+  <a class="nav-item" href="#gt"><span class="ic">🎯</span>GT 会议决策参阅</a>
+  <a class="nav-item" href="#intel"><span class="ic">🌐</span>战略情报洞察</a>
+  <a class="nav-item" href="#patent"><span class="ic">📜</span>专利全景洞察</a>
+  <a class="nav-item" href="#drug"><span class="ic">💊</span>新药 & 临床检索</a>
+
+  <div class="sb-section">Astrolabe 星图</div>
+  <a class="nav-item" href="#astrolabe"><span class="ic">⭐</span>星图计划 <span class="soon">即将上线</span></a>
+
+  <div class="sb-section">MedAlkaid 临床智研</div>
+  <a class="nav-item" href="#mr"><span class="ic">🏥</span>MR 医学审阅 <span class="badge">NEW</span></a>
+  <a class="nav-item" href="#sae"><span class="ic">📋</span>SAE 叙述撰写</a>
+  <a class="nav-item" href="#csr"><span class="ic">✅</span>CSR 报告校验</a>
+  <a class="nav-item" href="#saereport"><span class="ic">📄</span>SAE 报告生成</a>
+  <a class="nav-item" href="#iit"><span class="ic">🔍</span>IIT 方案审阅</a>
+
+  <div class="sb-section">AquaVista 数据湖</div>
+  <a class="nav-item" href="#aquavista"><span class="ic">🗄️</span>研发数据湖仓</a>
+
+  <div class="sb-section">通用 AI 工具</div>
+  <a class="nav-item" href="#xingzai"><span class="ic">💬</span>星仔智能助理 <span class="badge">NEW</span></a>
+  <a class="nav-item" href="#translate"><span class="ic">🌍</span>AI 翻译官</a>
+  <a class="nav-item" href="#ppt"><span class="ic">📊</span>AI PPT</a>
+
+  <div class="sb-section">附录</div>
+  <a class="nav-item" href="#faq"><span class="ic">❓</span>常见问题</a>
+  <div class="sb-foot">复星医药 © 2026 · PharmAID</div>
+</aside>
+
+<!-- ========== MAIN ========== -->
+<div class="main">
+  <div class="topbar">
+    <span class="topbar-t">PharmAID 数智研发平台 · 用户手册</span>
+    <span class="topbar-pill">2026 年 6 月版</span>
+  </div>
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-tag">USER MANUAL · 用户手册</div>
+      <h1>Pharm<span>AID</span><br>数智研发平台</h1>
+      <div class="hero-sub">连接数据、洞察、决策与研发效率</div>
+      <div class="hero-pills">
+        <span class="hero-pill">🎯 PharmaSight 决策</span>
+        <span class="hero-pill">⭐ Astrolabe 星图</span>
+        <span class="hero-pill">🏥 MedAlkaid 临床</span>
+        <span class="hero-pill">🗄️ AquaVista 数据湖</span>
+      </div>
+    </div>
+
+    <!-- ① 平台简介 -->
+    <div class="section" id="intro">
+      <div class="sec-hd">
+        <div class="sec-ic i-bl">🏠</div>
+        <h2>平台简介</h2><span class="num">01</span>
+      </div>
+      <p>PharmAID 是复星医药为研发团队打造的一站式 AI 作业平台，连接数据、洞察、决策与研发效率，覆盖从情报搜集到临床文档的全链路场景。</p>
+      <div class="sg">
+        <div class="sg-card"><div class="si">🎯</div><div class="sn">PharmaSight 决策</div><div class="sd">支撑战略 / 商业 / 管线决策，辅助情报搜集、竞品格局研判与决策材料准备，同时赋能职能场景提效（竞品分析 / 专利洞察 / 销售预测 / 人力管理 / 财务决策）</div></div>
+        <div class="sg-card"><div class="si">⭐</div><div class="sn">Astrolabe 星图计划</div><div class="sd">以 AIDD 为技术底座，覆盖药物发现与临床前研究场景（即将上线）</div></div>
+        <div class="sg-card"><div class="si">🏥</div><div class="sn">MedAlkaid 临床智研</div><div class="sd">围绕临床研发、医学写作与药物警戒场景，提升医学审阅、方案撰写、SAE 叙述和研究报告生成效率</div></div>
+        <div class="sg-card"><div class="si">🗄️</div><div class="sn">AquaVista 数据湖</div><div class="sd">沉淀研发数据底座，支持数据查询、洞察与可视化分析</div></div>
+      </div>
+    </div>
+
+    <!-- ② 登录与界面 -->
+    <div class="section" id="login">
+      <div class="sec-hd">
+        <div class="sec-ic i-tl">🔐</div>
+        <h2>登录与界面</h2><span class="num">02</span>
+      </div>
+      <div class="ib"><strong>访问地址</strong><code>https://pharmaid.fosunpharma.com</code></div>
+      <h3>界面整体布局</h3>
+      <div class="layout-dia">
+        <div class="ld-left">
+          <div class="ld-brand">Pharm<span>AID</span></div>
+          <div class="ld-item on">工作台</div>
+          <div class="ld-item">智能体导览</div>
+          <div class="ld-sep"></div>
+          <div class="ld-item">PharmaSight 决策 ▾</div>
+          <div class="ld-item sub">智能竞品分析助手</div>
+          <div class="ld-item sub">销售额预测</div>
+          <div class="ld-item sub">GT 会议决策参阅</div>
+          <div class="ld-item sub">战略情报洞察</div>
+          <div class="ld-item sub">专利全景洞察</div>
+          <div class="ld-item sub">新药 & 临床检索</div>
+          <div class="ld-sep"></div>
+          <div class="ld-item dim">Astrolabe 星图计划 ▾</div>
+          <div class="ld-item">MedAlkaid 临床智研 ▾</div>
+          <div class="ld-item">AquaVista 数据湖 ▾</div>
+          <div class="ld-item">通用 AI 工具 ▾</div>
+          <div class="ld-sep"></div>
+          <div class="ld-item dim">权限管理 · 历史项目</div>
+        </div>
+        <div class="ld-right">
+          <div class="ld-right-top">
+            <div class="rt-label">顶部 Topbar</div>
+            <div class="rt-title">当前模块标题 &nbsp;·&nbsp; 操作按钮区</div>
+          </div>
+          <div class="ld-zone" style="flex:1">
+            <div class="zl">主内容区 — 随所选模块动态切换</div>
+            <div class="zi">
+              <span>检索 / 对话 / 文件上传</span>
+              <span>结果展示 / 报告生成</span>
+              <span>历史任务查阅 / 导出</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ 场景导航 -->
+    <div class="section" id="scene">
+      <div class="sec-hd">
+        <div class="sec-ic i-vl">🗺️</div>
+        <h2>我想做什么？场景导航</h2><span class="num">03</span>
+      </div>
+      <table class="sct">
+        <thead><tr><th>您的任务场景</th><th>推荐模块</th><th>核心能力</th></tr></thead>
+        <tbody>
+          <tr><td>问问题、查资料、读文件</td><td>💬 星仔（星仔模式）</td><td>接入 Kimi 2.6，支持知识库选择与文件上传</td></tr>
+          <tr><td>写医药深度研究报告</td><td>🔭 星仔（DocuSight 模式）</td><td>全网搜索 + 思考链路透明 + 一键下载研报</td></tr>
+          <tr><td>核验关键结论 / 比对多源口径</td><td>🔭 星仔 · DocuSight（多引擎验证）</td><td>多模型并发生成独立报告，对比评析，共识/分歧标记</td></tr>
+          <tr><td>看市场竞品情报动态</td><td>🌐 战略情报洞察</td><td>多维筛选（信息源 / 药物 / 靶点等），卡片浏览</td></tr>
+          <tr><td>预测产品市场销售额</td><td>📈 销售额预测</td><td>开始新项目，填参数，查看历史项目</td></tr>
+          <tr><td>分析竞品管线</td><td>🔬 智能竞品分析助手</td><td>AI 驱动管线检索，任务历史可查</td></tr>
+          <tr><td>GT 会议材料准备 / 辅助</td><td>🎯 GT 会议决策参阅</td><td>会前准备 + GT-Copilot + 会后准备</td></tr>
+          <tr><td>查专利</td><td>📜 专利全景洞察</td><td>简单搜索 / 高级搜索，化合物结构检索即将上线</td></tr>
+          <tr><td>查新药进展 & 临床试验</td><td>💊 新药 & 临床检索</td><td>聚合新药进展与临床信息，提升检索效率</td></tr>
+          <tr><td>处理 SAE 病例医学审阅</td><td>🏥 MR 医学审阅</td><td>上传病例 PDF + 说明书，AI 生成审阅结论</td></tr>
+          <tr><td>撰写 SAE 叙述 / 随访报告</td><td>📋 SAE 叙述撰写</td><td>模板生成初稿，SAE Narrative / 随访 / 历史报告</td></tr>
+          <tr><td>校验 CSR 报告一致性</td><td>✅ CSR 报告校验</td><td>立即开始，查看历史项目</td></tr>
+          <tr><td>生成 SAE 安全信息报告</td><td>📄 SAE 报告生成</td><td>【PV】安全信息工作流</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ④ 工作台 -->
+    <div class="section" id="dashboard">
+      <div class="sec-hd">
+        <div class="sec-ic i-bl">📊</div>
+        <h2>工作台</h2><span class="num">04</span>
+      </div>
+      <p>登录后的默认首页，汇聚核心信息与快捷入口。</p>
+      <div class="g3">
+        <div class="g3-card"><div class="gi">🤖</div><div class="gn">星仔快捷入口</div><div class="gd">标准模式 / DocuSight NEW / 项目评估助手，点击「进入星仔」</div></div>
+        <div class="g3-card"><div class="gi">📰</div><div class="gn">今日头条</div><div class="gd">最新医药行业动态轮播，每条附 AI 自动生成的详细摘要</div></div>
+        <div class="g3-card"><div class="gi">📡</div><div class="gd">最新情报动态</div><div class="gd" style="font-weight:700;color:var(--gray-9);margin-bottom:3px;font-size:12.5px">最新情报动态</div><div class="gd">药闻 / 情报 / 专利 三 Tab，每周五 17:00 更新</div></div>
+      </div>
+      <h3>其他临床工具快捷入口</h3>
+      <table class="dt">
+        <thead><tr><th>系统</th><th>定位</th></tr></thead>
+        <tbody>
+          <tr><td>INNOX</td><td>项目管理</td></tr>
+          <tr><td>CTMS</td><td>临床试验</td></tr>
+          <tr><td>DMS</td><td>文档管理</td></tr>
+          <tr><td>PV</td><td>药物警戒</td></tr>
+          <tr><td>RIM</td><td>注册申报</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ⑤ 智能体导览 -->
+    <div class="section" id="agenttour">
+      <div class="sec-hd">
+        <div class="sec-ic i-bl">🤖</div>
+        <h2>智能体导览</h2><span class="num">05</span>
+      </div>
+      <div class="mc">
+        <div class="mc-hd">
+          <div class="mc-ic i-bl">🗂️</div>
+          <div>
+            <div class="mc-title">PharmAID 数智研发平台 · 全部智能体</div>
+            <div class="mc-sub">一站式浏览所有模块，按套件分类筛选或查看全部</div>
+            <div class="mc-url">/agentTour</div>
+          </div>
+        </div>
+        <div class="mc-body">
+          <p>智能体导览页展示平台所有功能模块的卡片，可按套件（PharmaSight / Astrolabe / MedAlkaid / AquaVista）切换筛选，或点击「全部智能体」一览。点击卡片直接进入对应功能。</p>
+          <div class="tb"><strong>💡 新用户建议</strong>首次使用前，先浏览智能体导览了解各模块能力，再对照自身场景选择工具。</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <!-- ===== PharmaSight ===== -->
+    <div class="section">
+      <div class="sec-hd">
+        <div class="sec-ic i-bl">🎯</div>
+        <h2>PharmaSight 决策套件</h2><span class="num">06</span>
+      </div>
+    </div>
+
+    <!-- 竞品 -->
+    <div class="mc" id="pipeline">
+      <div class="mc-hd">
+        <div class="mc-ic i-bl">🔬</div>
+        <div>
+          <div class="mc-title">智能竞品分析助手</div>
+          <div class="mc-sub">AI 驱动的药物管线检索与竞品深度对比平台</div>
+          <div class="mc-url">/pipeline</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <h3>使用方式</h3>
+        <div class="steps">
+          <div class="step"><div class="sn2">1</div><div class="sc"><div class="st">在输入框填写查询条件，点击生成</div><div class="sd">描述目标适应症、地区、临床阶段、研发状态等维度</div></div></div>
+          <div class="step"><div class="sn2">2</div><div class="sc"><div class="st">观察 AI 思考过程</div><div class="sd">AI 分析逻辑实时外显，可展开/折叠，用于核查推理准确性</div></div></div>
+          <div class="step"><div class="sn2">3</div><div class="sc"><div class="st">查看管线初筛结果表格</div><div class="sd">含商品名、研发机构、适应症、药理类型、靶点、海外/国内状态等字段</div></div></div>
+        </div>
+        <h3>示例提问</h3>
+        <div class="chips">
+          <span class="chip">胃食管癌国内 I 期后管线</span>
+          <span class="chip">结直肠癌国内批准上市获批管线</span>
+          <span class="chip">C3 肾小球病国内二期后在研管线</span>
+        </div>
+        <h3>任务历史</h3>
+        <ul class="fl">
+          <li>点击左上角「任务历史」查看所有历史分析任务</li>
+          <li>支持按地域/状态筛选，支持关键词搜索</li>
+          <li>每条任务支持下载结果或点击查看详情</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 销售额预测 -->
+    <div class="mc" id="sales">
+      <div class="mc-hd">
+        <div class="mc-ic i-tl">📈</div>
+        <div>
+          <div class="mc-title">销售额预测</div>
+          <div class="mc-sub">商业评估，您的市场洞察利器 — 让项目决策更科学、更高效</div>
+          <div class="mc-url">/businesAdd</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <div class="steps">
+          <div class="step"><div class="sn2">1</div><div class="sc"><div class="st">点击「开始新项目」</div></div></div>
+          <div class="step"><div class="sn2">2</div><div class="sc"><div class="st">填写项目参数并提交</div><div class="sd">AI 据此生成销售预测曲线与市场分析</div></div></div>
+          <div class="step"><div class="sn2">3</div><div class="sc"><div class="st">在「查看历史项目」中查阅结果</div><div class="sd">支持查看、编辑参数、导出等操作</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GT -->
+    <div class="mc" id="gt">
+      <div class="mc-hd">
+        <div class="mc-ic i-vl">🎯</div>
+        <div>
+          <div class="mc-title">GT 会议决策参阅</div>
+          <div class="mc-sub">沉淀会议内容，支撑会前准备、会中辅助与会后复盘</div>
+          <div class="mc-url">/decisionReport</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <div class="tabs">
+          <div class="tab on">📋 会前准备</div>
+          <div class="tab">🤖 GT-Copilot</div>
+          <div class="tab">📝 会后准备</div>
+        </div>
+        <table class="dt" style="margin-top:14px">
+          <thead><tr><th>Tab</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>会前准备</td><td>上传会议材料，AI 解析生成结构化摘要，辅助评审委员快速了解项目现状</td></tr>
+            <tr><td>GT-Copilot</td><td>会中 AI 实时辅助，即时查询项目信息与行业数据，支持 Go/No-Go 决策参阅</td></tr>
+            <tr><td>会后准备</td><td>沉淀历史决策记录，展示决策主题、项目名称、决策点、决策时间，支持历史查询</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 战略情报 -->
+    <div class="mc" id="intel">
+      <div class="mc-hd">
+        <div class="mc-ic i-bl">🌐</div>
+        <div>
+          <div class="mc-title">战略情报洞察</div>
+          <div class="mc-sub">药品、靶点情报检索、趋势判断与决策参考</div>
+          <div class="mc-url">/intelInsign</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <h3>筛选条件</h3>
+        <div class="chips">
+          <span class="chip">信息源</span>
+          <span class="chip">资讯类别</span>
+          <span class="chip">药物</span>
+          <span class="chip">靶点</span>
+          <span class="chip">关键词</span>
+        </div>
+        <ul class="fl">
+          <li>点击「情报检索」执行搜索，点击「重置」清空条件</li>
+          <li>结果展示：卡片视图（默认），每条包含发表时间、URL、内容简要、靶点、药物、信息源、资讯类别、关键词</li>
+          <li>综合排序默认「智能排序」，支持切换</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 专利 -->
+    <div class="mc" id="patent">
+      <div class="mc-hd">
+        <div class="mc-ic i-al">📜</div>
+        <div>
+          <div class="mc-title">专利全景洞察</div>
+          <div class="mc-sub">专利检索 · 化合物检索</div>
+          <div class="mc-url">/patentInsign</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <table class="dt">
+          <thead><tr><th>检索方式</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>简单搜索</td><td>关键词 / 公司名 / 人名检索</td></tr>
+            <tr><td>高级搜索</td><td>通过药物名称、靶点、适应症等多字段组合检索专利</td></tr>
+            <tr><td>结构式检索</td><td>化合物结构式检索 — 新功能快马加鞭赶来中…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 新药临床 -->
+    <div class="mc" id="drug">
+      <div class="mc-hd">
+        <div class="mc-ic i-tl">💊</div>
+        <div>
+          <div class="mc-title">新药 & 临床检索</div>
+          <div class="mc-sub">聚合新药进展与临床试验信息，提升检索效率</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <p>整合新药研发进展与临床试验数据，支持多维度检索，快速定位目标药物、适应症或临床试验信息。</p>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <!-- Astrolabe -->
+    <div class="mc" id="astrolabe" style="margin-bottom:28px">
+      <div class="mc-hd">
+        <div class="mc-ic i-vl">⭐</div>
+        <div>
+          <div class="mc-title">Astrolabe 星图计划 <span class="bsoon">即将上线</span></div>
+          <div class="mc-sub">以 AIDD 为技术底座，覆盖药物发现与临床前研究场景</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <div class="g3">
+          <div class="g3-card"><div class="gi">🧠</div><div class="gn">Model Hub</div><div class="gd">统一管理和调用早研 AI 模型与工具</div></div>
+          <div class="g3-card"><div class="gi">⚗️</div><div class="gn">Molecule Report</div><div class="gd">一键生成标准化的分子信息报告</div></div>
+          <div class="g3-card"><div class="gi">🤖</div><div class="gn">Agents</div><div class="gd">自主执行研发任务的 AI 智能体</div></div>
+        </div>
+        <div class="wb" style="margin-top:4px">⏳ 三个子模块均在开发中，请关注平台公告。</div>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <!-- ===== MedAlkaid ===== -->
+    <div class="section">
+      <div class="sec-hd">
+        <div class="sec-ic i-tl">🏥</div>
+        <h2>MedAlkaid 临床智研</h2><span class="num">07</span>
+      </div>
+      <p>围绕临床研发、医学写作与药物警戒场景，提升医学审阅、方案撰写、SAE 叙述和研究报告生成效率。</p>
+    </div>
+
+    <!-- MR -->
+    <div class="mc" id="mr">
+      <div class="mc-hd">
+        <div class="mc-ic i-tl">🏥</div>
+        <div>
+          <div class="mc-title">MR 医学审阅 <span class="bnew">NEW</span></div>
+          <div class="mc-sub">辅助 SAE 病例医学审阅，分析药物相关性，生成审阅结论</div>
+          <div class="mc-url">/PV/mr/create</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <div class="tabs">
+          <div class="tab on">创建任务</div>
+          <div class="tab">经验入库</div>
+          <div class="tab">任务历史</div>
+          <div class="tab">IB 管理</div>
+        </div>
+        <h3>创建任务 — 三步流程</h3>
+        <div class="steps">
+          <div class="step"><div class="sn2">1</div><div class="sc"><div class="st">上传病例</div><div class="sd">拖入或点击上传需要分析的病例，支持格式：PDF</div></div></div>
+          <div class="step"><div class="sn2">2</div><div class="sc"><div class="st">上传说明书</div><div class="sd">上传产品说明书，作为药物相关性判断的参考依据</div></div></div>
+          <div class="step"><div class="sn2">3</div><div class="sc"><div class="st">生成结果</div><div class="sd">AI 自动分析药物相关性，输出结构化医学审阅结论</div></div></div>
+        </div>
+        <ul class="fl" style="margin-top:12px">
+          <li>「经验入库」：将审阅结论沉淀为知识库，供后续同类案例参考</li>
+          <li>「任务历史」：查看全部历史任务及处理状态</li>
+          <li>「IB 管理」：管理研究者手册（Investigator's Brochure）</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SAE 叙述 -->
+    <div class="mc" id="sae">
+      <div class="mc-hd">
+        <div class="mc-ic i-bl">📋</div>
+        <div>
+          <div class="mc-title">SAE 叙述撰写（PV 工具箱）</div>
+          <div class="mc-sub">按模板生成严重不良事件叙述初稿，提升撰写效率</div>
+          <div class="mc-url">/PV/tools</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <div class="tabs">
+          <div class="tab on">SAE Narrative 撰写</div>
+          <div class="tab">随访报告</div>
+          <div class="tab">历史报告</div>
+        </div>
+        <table class="dt" style="margin-top:14px">
+          <thead><tr><th>Tab</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>SAE Narrative 撰写</td><td>上传 SAE 数据，选择提示词模板生成叙述初稿；在「历史报告」中查看、编辑、保存或下载</td></tr>
+            <tr><td>随访报告</td><td>关联已有历史报告，上传随访数据后生成随访报告</td></tr>
+            <tr><td>历史报告</td><td>查看全部历史生成记录，支持下载与批阅</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CSR -->
+    <div class="mc" id="csr">
+      <div class="mc-hd">
+        <div class="mc-ic i-tl">✅</div>
+        <div>
+          <div class="mc-title">CSR 报告校验</div>
+          <div class="mc-sub">让每一份责任都经得起校验 — 检查 CSR 内容前后一致性</div>
+          <div class="mc-url">/csrEvaluation</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <div class="steps">
+          <div class="step"><div class="sn2">1</div><div class="sc"><div class="st">点击「立即开始」，上传 CSR 文档</div></div></div>
+          <div class="step"><div class="sn2">2</div><div class="sc"><div class="st">AI 全文扫描，识别数据、术语、结论等质量风险</div></div></div>
+          <div class="step"><div class="sn2">3</div><div class="sc"><div class="st">输出风险点报告</div></div></div>
+        </div>
+        <p style="margin-top:10px">点击「查看历史项目」可随时回溯已完成的校验任务。</p>
+      </div>
+    </div>
+
+    <!-- SAE 报告生成 -->
+    <div class="mc" id="saereport">
+      <div class="mc-hd">
+        <div class="mc-ic i-bl">📄</div>
+        <div>
+          <div class="mc-title">SAE 报告生成</div>
+          <div class="mc-sub">结构化生成 SAE 相关报告，减少病例信息整理与重复录入工作</div>
+          <div class="mc-url">/PV</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <p>点击「立即开始」进入 <strong>【PV】安全信息工作流</strong>，按步骤完成信息录入，AI 辅助结构化生成 SAE 法规报告。</p>
+      </div>
+    </div>
+
+    <!-- IIT -->
+    <div class="mc" id="iit">
+      <div class="mc-hd">
+        <div class="mc-ic i-vl">🔍</div>
+        <div>
+          <div class="mc-title">IIT 方案审阅</div>
+          <div class="mc-sub">审阅 IIT 研究方案，识别研究设计、入排标准、终点与合规风险</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <p>上传 IIT 研究方案文档，AI 进行全文解析，输出结构化审阅意见，标注潜在风险点，辅助委员会高效完成方案评估。</p>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <!-- AquaVista -->
+    <div class="section" id="aquavista">
+      <div class="sec-hd">
+        <div class="sec-ic i-tl">🗄️</div>
+        <h2>AquaVista 数据湖</h2><span class="num">08</span>
+      </div>
+      <div class="mc">
+        <div class="mc-hd">
+          <div class="mc-ic i-tl">🗄️</div>
+          <div>
+            <div class="mc-title">研发数据湖仓</div>
+            <div class="mc-sub">沉淀研发数据底座，支持数据查询、洞察与可视化分析</div>
+          </div>
+        </div>
+        <div class="mc-body">
+          <p>研发数据湖仓统一汇聚复星医药研发全流程数据，提供数据查询、洞察分析与可视化能力，为各 AI 智能体提供高质量数据底座。</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <!-- ===== 通用 AI 工具 ===== -->
+    <div class="section">
+      <div class="sec-hd">
+        <div class="sec-ic i-vl">💬</div>
+        <h2>通用 AI 工具</h2><span class="num">09</span>
+      </div>
+    </div>
+
+    <!-- 星仔 -->
+    <div class="mc" id="xingzai">
+      <div class="mc-hd">
+        <div class="mc-ic i-vl">💬</div>
+        <div>
+          <div class="mc-title">星仔智能助理 <span class="bnew">NEW</span></div>
+          <div class="mc-sub">懂医药的 AI 对话助手，支持星仔、DocuSight、多引擎验证三种模式</div>
+          <div class="mc-url">/chatIndex</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <h3>三种使用模式</h3>
+        <div class="chat-modes">
+          <div class="chat-mode on">💬 星仔</div>
+          <div class="chat-mode">🔭 DocuSight</div>
+          <div class="chat-mode">🔬 多引擎验证</div>
+        </div>
+        <table class="dt" style="margin-top:10px">
+          <thead><tr><th>模式</th><th>适用场景</th></tr></thead>
+          <tbody>
+            <tr><td>星仔</td><td>日常问答、资料查询、文件解读。接入 <strong>Kimi 2.6</strong> 大模型，支持选择知识库（知识库选项在输入区左侧图标），内容由 AI 混合大模型生成，请仔细甄别</td></tr>
+            <tr><td>DocuSight</td><td>深度研报生成，全网搜索 + 思考链路全透明 + 结果可下载。适合输入「生成报告式」指令，如"帮我总结 2025 年 ASCO 的最新进展"</td></tr>
+            <tr><td>多引擎验证</td><td>多模型（Gemini、千问等）并发生成独立报告，综合决策中枢生成对比评析，展示共识结论、差异结论、证据链及人工复核建议。适合核验关键结论、比对多源口径、准备正式汇报时开启</td></tr>
+          </tbody>
+        </table>
+        <h3>功能说明</h3>
+        <ul class="fl">
+          <li><strong>新建对话</strong>：点击左上角「新建对话」开启新会话</li>
+          <li><strong>历史对话</strong>：左侧列表按今天 / 近一周 / 近一月 / 近一年归档，支持关键词搜索</li>
+          <li><strong>知识库</strong>：点击输入区左侧图标可选择挂载的知识库（当前可用 2 个）</li>
+          <li><strong>模型</strong>：当前使用 Kimi 2.6，可通过输入区下拉切换</li>
+        </ul>
+        <h3>示例提问</h3>
+        <div class="chips">
+          <span class="chip">帮我总结 2025 年 ASCO 的最新进展信息</span>
+          <span class="chip">最新阿尔兹海默症的最热门在研靶点有哪些？</span>
+          <span class="chip">目前哪几个公司有 Chk1 管线？分别在什么阶段？</span>
+          <span class="chip">请帮我总结这份文件的内容</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI 翻译 -->
+    <div class="mc" id="translate">
+      <div class="mc-hd">
+        <div class="mc-ic i-tl">🌍</div>
+        <div>
+          <div class="mc-title">AI 翻译官</div>
+          <div class="mc-sub">医药垂直领域多语言互译</div>
+          <div class="mc-url">/translate</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <p>提供医药专业文档与文本的 AI 翻译服务，支持多语言互译，针对医药领域术语进行优化处理。</p>
+      </div>
+    </div>
+
+    <!-- AI PPT -->
+    <div class="mc" id="ppt">
+      <div class="mc-hd">
+        <div class="mc-ic i-gl">📊</div>
+        <div>
+          <div class="mc-title">AI PPT</div>
+          <div class="mc-sub">基于文档或提纲自动生成结构化演示文稿</div>
+          <div class="mc-url">/ppt</div>
+        </div>
+      </div>
+      <div class="mc-body">
+        <p>输入主题或上传参考文档，AI 自动规划章节结构并生成内容，输出可编辑 PPT 文件，适用于汇报材料与会议准备。</p>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <!-- FAQ -->
+    <div class="section" id="faq">
+      <div class="sec-hd">
+        <div class="sec-ic i-al">❓</div>
+        <h2>常见问题</h2><span class="num">附录</span>
+      </div>
+      <div class="faq"><div class="faq-q"><span class="qb">Q1</span>访问时出现「您的连接不是私密连接」怎么办？</div><div class="faq-a">这是内网证书常见现象，无需担心。点击页面上的「高级」→「继续访问」即可正常进入。</div></div>
+      <div class="faq"><div class="faq-q"><span class="qb">Q2</span>Astrolabe 星图计划的三个模块何时上线？</div><div class="faq-a">Model Hub、Molecule Report、Agents 均在积极开发中，请关注平台公告。</div></div>
+      <div class="faq"><div class="faq-q"><span class="qb">Q3</span>竞品分析找不到某个适应症怎么办？</div><div class="faq-a">尝试使用上一级适应症表达方式，或换用关键词描述。</div></div>
+      <div class="faq"><div class="faq-q"><span class="qb">Q4</span>最新情报动态多久更新一次？</div><div class="faq-a">每周五 17:00 更新。如需实时情报，可使用战略情报洞察模块手动检索。</div></div>
+      <div class="faq"><div class="faq-q"><span class="qb">Q5</span>星仔回答内容的准确性如何保证？</div><div class="faq-a">星仔内容由 AI 混合大模型生成，请仔细甄别。DocuSight 模式会展示思考链路和来源，可点击溯源核验。</div></div>
+      <div class="faq"><div class="faq-q"><span class="qb">Q6</span>CSR 报告校验和 MR 医学审阅有什么区别？</div><div class="faq-a">CSR 报告校验（/csrEvaluation）针对临床研究报告的前后一致性检查；MR 医学审阅（/PV/mr）针对 SAE 病例的药物相关性分析，需上传病例 PDF 和产品说明书。</div></div>
+
+      <hr class="div">
+      <p style="text-align:center;color:var(--gray-5);font-size:12.5px;margin-top:8px">
+        复星医药 PharmAID 数智研发平台 · 用户手册 · 2026 年 6 月版<br>
+        内容基于平台当前版本，如有更新请以平台最新页面为准
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const navs = [...document.querySelectorAll('.nav-item')];
+  const topbar = document.querySelector('.topbar');
+  const progress = document.createElement('div');
+  progress.className = 'scroll-progress';
+  progress.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(progress);
+
+  const sectionTargets = navs
+    .map(nav => document.querySelector(nav.getAttribute('href')))
+    .filter(Boolean);
+
+  const setActiveNav = id => {
+    navs.forEach(n => n.classList.remove('active'));
+    const lk = document.querySelector(`.nav-item[href="#${id}"]`);
+    if (lk) {
+      lk.classList.add('active');
+      lk.scrollIntoView({ block:'nearest', behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    }
+  };
+
+  const navObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) setActiveNav(e.target.id);
+    });
+  }, { rootMargin: '-12% 0px -72% 0px', threshold: 0.01 });
+  sectionTargets.forEach(s => navObserver.observe(s));
+
+  navs.forEach(nav => {
+    nav.addEventListener('click', event => {
+      const target = document.querySelector(nav.getAttribute('href'));
+      if (!target) return;
+      event.preventDefault();
+      nav.classList.add('is-clicked');
+      window.setTimeout(() => nav.classList.remove('is-clicked'), 260);
+      target.scrollIntoView({ block:'start', behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+      history.replaceState(null, '', nav.getAttribute('href'));
+      setActiveNav(target.id);
+    });
+  });
+
+  const revealItems = [
+    ...document.querySelectorAll('.hero, .section, .mc, .sg-card, .g3-card, .layout-dia, .ib, .wb, .tb, .dt, .sct, .faq')
+  ];
+  revealItems.forEach((el, index) => {
+    el.classList.add('reveal');
+    el.style.transitionDelay = `${Math.min(index % 4, 3) * 45}ms`;
+  });
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -8% 0px' });
+  revealItems.forEach(el => revealObserver.observe(el));
+
+  document.querySelectorAll('.faq').forEach(faq => {
+    faq.setAttribute('tabindex', '0');
+    faq.setAttribute('aria-expanded', 'true');
+    const toggle = () => {
+      const isCollapsed = faq.classList.toggle('is-collapsed');
+      faq.setAttribute('aria-expanded', String(!isCollapsed));
+    };
+    faq.addEventListener('click', toggle);
+    faq.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggle();
+      }
+    });
+  });
+
+  const updateScrollState = () => {
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+    progress.style.transform = `scaleX(${Math.min(Math.max(ratio, 0), 1)})`;
+    if (topbar) topbar.classList.toggle('is-scrolled', window.scrollY > 8);
+  };
+  updateScrollState();
+  window.addEventListener('scroll', updateScrollState, { passive:true });
+</script>
+</body>
+</html>
